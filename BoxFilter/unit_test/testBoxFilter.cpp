@@ -1,7 +1,7 @@
 /*
  * @Author: xieydd
  * @since: 2020-06-29 23:46:55
- * @lastTime: 2020-07-06 22:11:17
+ * @lastTime: 2020-07-09 22:45:23
  * @LastAuthor: Do not edit
  * @message: 
  */
@@ -156,6 +156,138 @@ TEST(netTest, filterFastV2)
     }
 
     std::cout << "\n          Fast V2 BoxFilfer Average Cost time: " << avgTime / loop << "ms" << std::endl;
+
+    if (printMat == 1)
+    {
+        std::cout << "result: " << std::endl;
+        print(&output[0], height, width);
+    }
+}
+
+TEST(netTest, filterFastV2NeonIntrinsics)
+{
+    std::vector<float> input;
+    std::vector<float> output;
+    int size = height * width;
+    input.resize(size);
+    output.resize(size);
+
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_real_distribution<> dis(-2.0, 2.0);
+    for (int i = 0; i < size; i++)
+    {
+        input[i] = dis(gen);
+        output[i] = 0.f;
+    }
+
+    BoxFilter boxf;
+    boxf.init(height, width, radius);
+
+    // Count time
+    float avgTime = 0.f;
+    double tmp;
+    for (int i = 0; i < loop; i++)
+    {
+        auto startClock = std::chrono::system_clock::now();
+        boxf.filterFastV2NeonIntrinsics(&input[0], radius, height, width, &output[0]);
+        auto endClock = std::chrono::system_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endClock - startClock);
+        tmp = double(duration.count()) * std::chrono::microseconds::period::num / 1000;
+        avgTime += tmp;
+        std::cout << "          [" << i << "]"
+                  << " Fast V2 BoxFilfer NEON Instrinsics Cost time: " << tmp << "ms" << std::endl;
+    }
+
+    std::cout << "\n          Fast V2 BoxFilfer NEON Intrinsics Average Cost time: " << avgTime / loop << "ms" << std::endl;
+
+    if (printMat == 1)
+    {
+        std::cout << "result: " << std::endl;
+        print(&output[0], height, width);
+    }
+}
+
+TEST(netTest, filterFastV2NeonAsm)
+{
+    std::vector<float> input;
+    std::vector<float> output;
+    int size = height * width;
+    input.resize(size);
+    output.resize(size);
+
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_real_distribution<> dis(-2.0, 2.0);
+    for (int i = 0; i < size; i++)
+    {
+        input[i] = dis(gen);
+        output[i] = 0.f;
+    }
+
+    BoxFilter boxf;
+    boxf.init(height, width, radius);
+
+    // Count time
+    float avgTime = 0.f;
+    double tmp;
+    for (int i = 0; i < loop; i++)
+    {
+        auto startClock = std::chrono::system_clock::now();
+        boxf.filterFastV2NeonAsm(&input[0], radius, height, width, &output[0]);
+        auto endClock = std::chrono::system_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endClock - startClock);
+        tmp = double(duration.count()) * std::chrono::microseconds::period::num / 1000;
+        avgTime += tmp;
+        std::cout << "          [" << i << "]"
+                  << " Fast V2 BoxFilfer NEON Asm Cost time: " << tmp << "ms" << std::endl;
+    }
+
+    std::cout << "\n          Fast V2 BoxFilfer NEON Asm Average Cost time: " << avgTime / loop << "ms" << std::endl;
+
+    if (printMat == 1)
+    {
+        std::cout << "result: " << std::endl;
+        print(&output[0], height, width);
+    }
+}
+
+TEST(netTest, filterFastV2NeonAsmV2)
+{
+    std::vector<float> input;
+    std::vector<float> output;
+    int size = height * width;
+    input.resize(size);
+    output.resize(size);
+
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_real_distribution<> dis(-2.0, 2.0);
+    for (int i = 0; i < size; i++)
+    {
+        input[i] = dis(gen);
+        output[i] = 0.f;
+    }
+
+    BoxFilter boxf;
+    boxf.init(height, width, radius);
+
+    // Count time
+    float avgTime = 0.f;
+    double tmp;
+    for (int i = 0; i < loop; i++)
+    {
+        auto startClock = std::chrono::system_clock::now();
+        boxf.filterFastV2NeonAsmV2(&input[0], radius, height, width, &output[0]);
+        auto endClock = std::chrono::system_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endClock - startClock);
+        tmp = double(duration.count()) * std::chrono::microseconds::period::num / 1000;
+        avgTime += tmp;
+        std::cout << "          [" << i << "]"
+                  << " Fast V2 BoxFilfer NEON Asm V2 Cost time: " << tmp << "ms" << std::endl;
+    }
+
+    std::cout << "\n          Fast V2 BoxFilfer NEON Asm V2 Average Cost time: " << avgTime / loop << "ms" << std::endl;
 
     if (printMat == 1)
     {

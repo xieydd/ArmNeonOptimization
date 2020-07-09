@@ -1,7 +1,7 @@
 /*
  * @Author: xieydd
  * @since: 2020-06-29 22:45:02
- * @lastTime: 2020-07-05 23:19:54
+ * @lastTime: 2020-07-09 09:43:03
  * @LastAuthor: Do not edit
  * @message: 
  */
@@ -18,6 +18,9 @@ public:
     void filter(float *input, int radius, int height, int width, float *output);
     void filterFast(float *input, int radius, int height, int width, float *output);
     void filterFastV2(float *input, int radius, int height, int width, float *output);
+    void filterFastV2NeonIntrinsics(float *input, int radius, int height, int width, float *output);
+    void filterFastV2NeonAsm(float *input, int radius, int height, int width, float *output);
+    void filterFastV2NeonAsmV2(float *input, int radius, int height, int width, float *output);
     void init(int height, int width, int radius)
     {
         free();
